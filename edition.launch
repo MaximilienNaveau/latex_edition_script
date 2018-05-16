@@ -7,10 +7,19 @@ function ctrl_c() {
     exit 1
 }
 
+f=$(grep -Elr 'documentclass' src/* | cut -d':' -f1)
+filelist=''
+for file in $f
+do
+    file=${file##*/}
+    file=${file%.*}
+    filelist=$filelist' ./build/'$file'.pdf '
+done
 
 kile &
-f=$(grep -Elr 'documentclass' src/* | cut -d':' -f1)
-f=${f##*/}
-echo 'building '$f
-f=${f%.*}
-sh -c 'okular ./build/'$f'.pdf & ./scripts/make_launcher.sh & wait'
+okular $filelist &
+./scripts/make_launcher.sh
+
+while true; do
+    sleep 1
+done
