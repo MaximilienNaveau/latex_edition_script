@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# trap ctrl-c and call ctrl_c()
+trap ctrl_c INT
+function ctrl_c() {
+    ./scripts/killall_launcher.sh
+    exit 1
+}
+
+
+kile &
+f=$(grep -Elr 'documentclass' src/* | cut -d':' -f1)
+f=${f##*/}
+echo 'building '$f
+f=${f%.*}
+sh -c 'okular ./build/'$f'.pdf & ./scripts/make_launcher.sh & wait'
