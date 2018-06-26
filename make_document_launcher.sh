@@ -11,6 +11,8 @@ while true ;
 do
     list_files=$(find src/ -name '*.tex')
     list_files+=" "$(find src/ -name '*.bib')
+    list_files+=" "$(find src/ -name '*.cls')
+    list_files+=" "$(find src/ -name '*.sty')
     if [[ -z "${list_files// }" ]]; then
 	# list empty
 #	echo "no files to notify, waiting 1s..."

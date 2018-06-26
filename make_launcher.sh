@@ -9,3 +9,7 @@ function ctrl_c() {
 
 ./scripts/make_document_launcher.sh &
 ./scripts/make_figure_launcher.sh &
+
+while true; do
+    sleep 1
+done
