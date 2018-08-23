@@ -23,10 +23,10 @@ DEPEND_SRCS_FIG:= $(shell find $(TKIZDIR) -name '*.tex')
 export TEXINPUTS=.:./header/:
 
 define link_bst_bib_sty
-	for f in $(shell find $(SRCDIR) -name '*.sty') \
-		$(shell find $(SRCDIR) -name '*.bib') \
-		$(shell find $(SRCDIR) -name '*.bst') \
-		$(shell find $(SRCDIR) -name '*.cls') ; do \
+	for f in $(shell find $(SRCDIR) -name "*.sty" | sed -e "s/^/\"/g" -e 's/$$/"/g' ) \
+		 $(shell find $(SRCDIR) -name "*.bib" | sed -e "s/^/\"/g" -e 's/$$/"/g' ) \
+		 $(shell find $(SRCDIR) -name "*.bst" | sed -e "s/^/\"/g" -e 's/$$/"/g' ) \
+		 $(shell find $(SRCDIR) -name "*.cls" | sed -e "s/^/\"/g" -e 's/$$/"/g' ) ; do \
 		echo $$f ; \
 		ln -sf $(ROOT)/$$f $(ROOT)/$(BUILDDIR)/ ;\
 	done
@@ -118,3 +118,6 @@ debug: $(DEPEND_SRCS)
 
 clean:
 	rm -f ./build/*
+
+bash_instruction:
+	$(call link_bst_bib_sty)	
