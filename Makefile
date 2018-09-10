@@ -1,5 +1,5 @@
 # default parameters
-ROOT:=$(PWD)
+ROOT:="$(PWD)"
 SRCDIR:=src
 HEADERDIR:=src/header
 BIBDIR:=src/bib
