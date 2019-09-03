@@ -1,5 +1,5 @@
 # default parameters
-ROOT:=$(PWD)
+ROOT:="$(PWD)"
 SRCDIR:=src
 HEADERDIR:=src/header
 BIBDIR:=src/bib
@@ -30,6 +30,7 @@ define link_bst_bib_sty
 		echo $$f ; \
 		ln -sf $(ROOT)/$$f $(ROOT)/$(BUILDDIR)/ ;\
 	done
+	ln -sf $(ROOT)/$(VIDEODIR) $(ROOT)/$(BUILDDIR)/
 endef
 
 define prepare_build
