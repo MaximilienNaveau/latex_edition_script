@@ -98,7 +98,7 @@ $(FILENAME): $(DEPEND_SRCS)
 
 figures: $(DEPEND_SRCS_FIG)
 	$(call prepare_build)
-	$(foreach source, $(DEPEND_SRCS_FIG), $(call build, $(TIKZDIR), $(basename $(source))) ; cp $(ROOT)/$(BUILDDIR)/$(basename $(source))).pdf $(ROOT)/$(FIGDIR))
+	$(foreach source, $(DEPEND_SRCS_FIG), $(call build, $(TIKZDIR), $(basename $(source))) ; cp $(ROOT)/$(BUILDDIR)/$(basename $(notdir $(source))).pdf $(ROOT)/$(FIGDIR))
 
 fast: $(DEPEND_SRCS)
 	$(call prepare_build)
