@@ -10,7 +10,7 @@ BUILDDIR:=build
 
 # useful parameter from above 
 # assumes there is a tikz folder in figures to compile them
-TKIZDIR:=$(ROOT)/$(FIGDIR)/tikz
+TIKZDIR:=$(ROOT)/$(FIGDIR)/tikz
 # get the main tex and seve the name wihtout extension in FILENAME
 FILENAME:=$(shell grep -Elr 'documentclass' $(SRCDIR)/*.tex | cut -d':' -f1)
 FILENAME:=$(notdir $(FILENAME))
@@ -18,7 +18,7 @@ FILENAME:=$(basename $(FILENAME))
 $(info The main tex is $(FILENAME).tex)
 TEXFILENAME:=$(FILENAME).tex
 DEPEND_SRCS:= $(shell find $(SRCDIR) -name '*.tex')
-DEPEND_SRCS_FIG:= $(shell find $(TKIZDIR) -name '*.tex')
+DEPEND_SRCS_FIG:= $(shell find $(TIKZDIR) -name '*.tex')
 # export this variable to access the .cls in the header folder
 export TEXINPUTS=.:./header/:
 
@@ -86,6 +86,12 @@ define build_debug
 	$(call bibtex, $(2))
 endef
 
+define build_figure
+	$(call build, $1, $(basename $2))
+	cp $(ROOT)/$(BUILDDIR)/$(basename $(notdir $2)).pdf $(ROOT)/$(FIGDIR)
+	echo "End of build_figure"
+endef
+
 all: $(DEPEND_SRCS)
 	$(call prepare_build)
 	$(call build, $(ROOT)/$(SRCDIR), $(FILENAME))
@@ -98,7 +104,7 @@ $(FILENAME): $(DEPEND_SRCS)
 
 figures: $(DEPEND_SRCS_FIG)
 	$(call prepare_build)
-	$(foreach source, $(DEPEND_SRCS_FIG), $(call build, $(TIKZDIR), $(basename $(source))) ; cp $(ROOT)/$(BUILDDIR)/$(basename $(notdir $(source))).pdf $(ROOT)/$(FIGDIR))
+	$(foreach source, $(DEPEND_SRCS_FIG), $(call build_figure, $(TIKZDIR), $(source)))
 
 fast: $(DEPEND_SRCS)
 	$(call prepare_build)
