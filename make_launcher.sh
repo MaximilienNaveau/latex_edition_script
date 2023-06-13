@@ -3,12 +3,19 @@
 # trap ctrl-c and call ctrl_c()
 trap ctrl_c INT
 function ctrl_c() {
-    ./scripts/killall_launcher.sh
+    `find . -type f -executable -name killall_launcher.sh -print`
     exit 1
 }
 
-./scripts/make_document_launcher.sh &
-./scripts/make_figure_launcher.sh &
+if ! command -v inotifywait &> /dev/null
+then
+    echo "inotifywait could not be found."
+    echo "Please run: sudo apt-get install inotify-tools"
+    exit
+fi
+
+`find . -type f -executable -name make_document_launcher.sh -print` &
+`find . -type f -executable -name make_figure_launcher.sh -print` &
 
 while true; do
     sleep 1
