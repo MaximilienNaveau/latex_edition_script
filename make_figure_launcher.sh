@@ -14,19 +14,22 @@ then
     exit
 fi
 
-
 while true ;
 do
-    list_files=$(find figures/ -name '*.tex')
+    list_folders=$(find . -name "tikz" -type d)
+    list_files=()
+    for folder in $list_folders; do
+        list_files+=$(find $folder -name '*.tex')
+    done
     if [[ -z "${list_files// }" ]]; then
-	# list empty
-#	echo "no files to notify, waiting 1s..."
-	sleep 1
+        # list empty
+        # echo "no files to notify, waiting 1s..."
+        sleep 1
     else
-	# list not empty
-	echo "the files to watch are "$list_files
-	inotifywait -e modify $list_files
-	make figures
-	sleep 0.1
+        # list not empty
+        echo "the files to watch are "$list_files
+        inotifywait -e modify $list_files
+        make figures
+        sleep 0.1
     fi
 done

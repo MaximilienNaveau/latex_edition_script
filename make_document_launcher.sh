@@ -25,18 +25,18 @@ do
     list_files+=" "$(find src/ -name '*.jpg')
     list_files+=" "$(find src/ -name '*.pdf')
     if [[ -z "${list_files// }" ]]; then
-	# list empty
-#	echo "no files to notify, waiting 1s..."
-	sleep 1
+        # list empty
+        # echo "no files to notify, waiting 1s..."
+        sleep 1
     else
-	# list not empty
-	echo "the files to watch are "$list_files
-	inotifywait -e modify $list_files
-    if [ $# -eq 0 ]; then
-    	make fast
-    else
-        make "$@"
-    fi
-	sleep 0.1
+        # list not empty
+        echo "the files to watch are "$list_files
+        inotifywait -e modify $list_files
+        if [ $# -eq 0 ]; then
+            make fast
+        else
+            make "$@"
+        fi
+        sleep 0.1
     fi
 done
