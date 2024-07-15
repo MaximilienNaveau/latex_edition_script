@@ -23,7 +23,10 @@ do
     list_files+=" "$(find src/ -name '*.sty')
     list_files+=" "$(find src/ -name '*.png')
     list_files+=" "$(find src/ -name '*.jpg')
+    list_files+=" "$(find src/ -name '*.jpeg')
     list_files+=" "$(find src/ -name '*.pdf')
+    list_files+=" "$(find src/ -name '*.eps')
+    list_files+=" "$(find src/ -name '*.svg')
     if [[ -z "${list_files// }" ]]; then
         # list empty
         # echo "no files to notify, waiting 1s..."
