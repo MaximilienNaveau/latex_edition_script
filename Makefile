@@ -8,15 +8,14 @@ FIGDIR:=figures
 VIDEODIR:=video
 BUILDDIR:=build
 
-# useful parameter from above 
+# useful parameter from above
 # assumes there is a tikz folder in figures to compile them
-TIKZDIR:=$(ROOT)/$(FIGDIR)/tikz
-# get the main tex and seve the name wihtout extension in FILENAME
-FILENAME:=$(shell grep -Elr 'documentclass' $(SRCDIR)/*.tex | cut -d':' -f1)
-FILENAME:=$(notdir $(FILENAME))
-FILENAME:=$(basename $(FILENAME))
-$(info The main tex is $(FILENAME).tex)
-TEXFILENAME:=$(FILENAME).tex
+TIKZDIR:=$(shell find $(SRCDIR) -name "tikz" -type d)
+# get the main tex and save the name wihtout extension in TARGETNAME
+TARGETNAME:=$(shell grep -Elr 'documentclass' `find $(SRCDIR) -name "*.tex"`)
+TARGETNAME:=$(notdir $(TARGETNAME))
+TARGETNAME:=$(basename $(TARGETNAME))
+$(info The main tex is $(TARGETNAME))
 DEPEND_SRCS:= $(shell find $(SRCDIR) -name '*.tex')
 DEPEND_SRCS_FIG:= $(shell find $(TIKZDIR) -name '*.tex')
 # export this variable to access the .cls in the header folder
@@ -48,9 +47,14 @@ endef
 
 define pdf_latex
 	echo "pdf_latex arguments are :" $(1) $(2)
-	for texfiles in $(2) ; do \
-		echo "Compiling :" $$texfiles.tex ;\
-		cd $(1) ; pdflatex -interaction=nonstopmode --output-directory=$(ROOT)/$(BUILDDIR) $$texfiles.tex ; cd $(ROOT) ; pwd ;\
+	for targetname in $(2) ; do \
+		cd $(1) ;\
+		texfile=`find . -name "$$targetname.tex"` ;\
+		working_dir=`echo $$texfile | sed 's|/[^/]*$$||'` ;\
+		cd $$working_dir ;\
+		texfile=`find . -name "$$targetname.tex"` ;\
+		pdflatex -interaction=nonstopmode --output-directory=$(ROOT)/$(BUILDDIR) $$texfile;\
+		cd $(ROOT) ; pwd ;\
 	done
 endef
 
@@ -94,10 +98,10 @@ endef
 
 all: $(DEPEND_SRCS)
 	$(call prepare_build)
-	$(call build, $(ROOT)/$(SRCDIR), $(FILENAME))
-	$(call end_build, $(FILENAME))
+	$(call build, $(ROOT)/$(SRCDIR), $(TARGETNAME))
+	$(call end_build, $(TARGETNAME))
 
-$(FILENAME): $(DEPEND_SRCS)
+$(TARGETNAME): $(DEPEND_SRCS)
 	$(call prepare_build)
 	$(call build_fast, $(ROOT)/$(SRCDIR), $@)
 	$(call end_build, $@)
@@ -108,20 +112,20 @@ figures: $(DEPEND_SRCS_FIG)
 
 fast: $(DEPEND_SRCS)
 	$(call prepare_build)
-	$(call build_fast, $(ROOT)/$(SRCDIR), $(FILENAME))
-	$(call end_build, $(FILENAME))
+	$(call build_fast, $(ROOT)/$(SRCDIR), $(TARGETNAME))
+	$(call end_build, $(TARGETNAME))
 
 count: $(DEPEND_SRCS)
 	wc -w $(DEPEND_SRCS)
 
 bib : $(DEPEND_SRCS)
 	$(call prepare_build)
-	$(call bibtex,$(FILENAME))	
+	$(call bibtex,$(TARGETNAME))	
 
 debug: $(DEPEND_SRCS)
 	$(call prepare_build)
-	$(call build_debug, $(ROOT)/$(SRCDIR), $(FILENAME))
-	$(call end_build, $(FILENAME))
+	$(call build_debug, $(ROOT)/$(SRCDIR), $(TARGETNAME))
+	$(call end_build, $(TARGETNAME))
 
 clean:
 	rm -f ./build/*

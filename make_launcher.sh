@@ -14,7 +14,12 @@ then
     exit
 fi
 
-`find . -type f -executable -name make_document_launcher.sh -print` &
+if [ $# -eq 0 ]; then
+    `find . -type f -executable -name make_document_launcher.sh -print` &
+else
+    `find . -type f -executable -name make_document_launcher.sh -print` #@ &
+fi
+
 `find . -type f -executable -name make_figure_launcher.sh -print` &
 
 while true; do

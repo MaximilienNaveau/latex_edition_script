@@ -17,7 +17,7 @@ then
 fi
 
 
-f=$(grep -Elr 'documentclass' src/*.tex | cut -d':' -f1)
+f=$(grep -Elr 'documentclass' `find $(SRCDIR) -name "*.tex"` | cut -d':' -f1)
 filelist=''
 for file in $f
 do
@@ -27,11 +27,18 @@ do
 done
 echo "files to track are "$filelist
 
-make fast
+if [ $# -eq 0 ]; then
+    make fast
+    okular $filelist &
+    `find . -type f -executable -name make_launcher.sh -print`
+else
+    make "$@"
+    okular ./build/$@.pdf &
+    `find . -type f -executable -name make_launcher.sh -print` $@
+fi
 
 code . &
-okular $filelist &
-`find . -type f -executable -name make_launcher.sh -print`
+
 
 while true; do
     sleep 1
