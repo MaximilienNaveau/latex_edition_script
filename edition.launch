@@ -27,6 +27,8 @@ do
 done
 echo "files to track are "$filelist
 
+make fast
+
 code . &
 okular $filelist &
 `find . -type f -executable -name make_launcher.sh -print`
