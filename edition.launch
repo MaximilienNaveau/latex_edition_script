@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-
 # trap ctrl-c and call ctrl_c()
 trap ctrl_c INT
 function ctrl_c() {
@@ -15,7 +13,6 @@ then
     echo "Please run: sudo apt-get install inotify-tools"
     exit
 fi
-
 
 f=$(grep -Elr 'documentclass' `find $(SRCDIR) -name "*.tex"` | cut -d':' -f1)
 filelist=''
