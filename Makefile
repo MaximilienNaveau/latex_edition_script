@@ -66,28 +66,28 @@ define pdf_latex_debug
 	done
 endef
 
-define bibtex
+define biber
 	for bibfiles in $(1) ; do \
-		echo "Bibtex on :" $$bibfiles.aux ;\
-		cd $(ROOT)/$(BUILDDIR) ; bibtex $$bibfiles.aux ; cd $(ROOT)/ ; \
+		echo "biber on :" $$bibfiles ;\
+		cd $(ROOT)/$(BUILDDIR) ; biber $$bibfiles ; cd $(ROOT)/ ; \
 	done
 endef
 
 define build
 	$(call pdf_latex, $(1), $(2))
-	$(call bibtex, $(2))
+	$(call biber, $(2))
 	$(call pdf_latex, $(1), $(2))
 	$(call pdf_latex, $(1), $(2))
 endef
 
 define build_fast
 	$(call pdf_latex, $(1), $(2))
-	$(call bibtex, $(2))
+	$(call biber, $(2))
 endef
 
 define build_debug
 	$(call pdf_latex_debug, $(1), $(2))
-	$(call bibtex, $(2))
+	$(call biber, $(2))
 endef
 
 define build_figure
@@ -120,7 +120,7 @@ count: $(DEPEND_SRCS)
 
 bib : $(DEPEND_SRCS)
 	$(call prepare_build)
-	$(call bibtex,$(TARGETNAME))	
+	$(call biber,$(TARGETNAME))	
 
 debug: $(DEPEND_SRCS)
 	$(call prepare_build)
