@@ -19,16 +19,21 @@ do
     list_folders=$(find . -name "tikz" -type d)
     list_files=()
     for folder in $list_folders; do
-        list_files+=$(find $folder -name '*.tex')
+        while IFS= read -r -d '' file; do
+            list_files+=("$file")
+        done < <(find src/ -name "*.tex" -print0)
     done
-    if [[ -z "${list_files// }" ]]; then
+    if [[ ${#list_files[@]} -eq 0 ]]; then
         # list empty
-        # echo "no files to notify, waiting 1s..."
+        echo "no files to watch, waiting 1s..."
         sleep 1
     else
         # list not empty
-        echo "the files to watch are "$list_files
-        inotifywait -e modify $list_files
+        echo "the files to watch are: "
+        printf "%s\n" "${list_files[@]}"
+
+        inotifywait -e modify "${list_files[@]}"
+
         make figures
         sleep 0.1
     fi
