@@ -53,7 +53,7 @@ define pdf_latex
 		working_dir=`echo $$texfile | sed 's|/[^/]*$$||'` ;\
 		cd $$working_dir ;\
 		texfile=`find . -name "$$targetname.tex"` ;\
-		pdflatex -interaction=nonstopmode --output-directory=$(ROOT)/$(BUILDDIR) $$texfile;\
+		pdflatex -shell-escape -interaction=nonstopmode --output-directory=$(ROOT)/$(BUILDDIR) $$texfile;\
 		cd $(ROOT) ; pwd ;\
 	done
 endef
@@ -62,7 +62,7 @@ define pdf_latex_debug
 	echo "pdf_latex arguments are :" $(1) $(2)
 	for texfiles in $(2) ; do \
 		echo "Compiling :" $$texfiles.tex ;\
-		cd $(1) ; pdflatex --output-directory=$(ROOT)/$(BUILDDIR) $$texfiles.tex ; cd $(ROOT) ; pwd ;\
+		cd $(1) ; pdflatex -shell-escape --output-directory=$(ROOT)/$(BUILDDIR) $$texfiles.tex ; cd $(ROOT) ; pwd ;\
 	done
 endef
 

@@ -38,6 +38,7 @@ do
         # list not empty
         echo "the files to watch are "$list_files
         inotifywait -e modify $list_files
+        reset
         if [ $# -eq 0 ]; then
             make fast
         else
