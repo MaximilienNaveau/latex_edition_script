@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # trap ctrl-c and call ctrl_c()
 trap ctrl_c INT
 function ctrl_c() {
@@ -32,7 +34,7 @@ do
     list_files+=" "$(find src/ -name '*.svg')
     if [[ -z "${list_files// }" ]]; then
         # list empty
-        # echo "no files to notify, waiting 1s..."
+        echo "no files to notify, waiting 1s..."
         sleep 1
     else
         # list not empty
