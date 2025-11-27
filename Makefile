@@ -41,7 +41,12 @@ endef
 define end_build
 	echo "copy of \"" $(1) "\" in the build folder"
 	for pdffile in $(1) ; do \
-		cp $(ROOT)/$(BUILDDIR)/$$pdffile.pdf $(ROOT)/$(BINDIR)/ ; \
+		if [ -f $(ROOT)/$(BUILDDIR)/$$pdffile.pdf ]; then \ \
+			echo "Copying file :" $$pdffile.pdf ; \
+			cp $(ROOT)/$(BUILDDIR)/$$pdffile.pdf $(ROOT)/$(BINDIR)/ ; \
+		else \
+			echo "Error: file $$pdffile.pdf not found in build folder!" ; \
+		fi ; \
 	done
 endef
 
